@@ -70,6 +70,7 @@ const toExit = async () => {
 
     .el-menu {
       height: 100%;
+      min-width: 80px;
 
       .userAvatar {
         display: flex;
