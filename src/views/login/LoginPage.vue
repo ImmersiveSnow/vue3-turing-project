@@ -23,6 +23,16 @@ const rules = {
       pattern: /^\S{6,15}$/,
       message: '密码必须是6-15位的非空字符',
       trigger: 'blur'
+    },
+    {
+      validator: (rule, value, callback) => {
+        if (value === formModel.value.username) {
+          callback(new Error('密码不能与用户名相同!'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
     }
   ],
   repassword: [
