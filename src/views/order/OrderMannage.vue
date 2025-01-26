@@ -33,7 +33,7 @@ const delOrder = async (row, $index) => {
     confirmButtonText: '确认',
     cancelButtonText: '取消'
   })
-  await orderDelService(row.orderID, uid)
+  await orderDelService(parseInt(row.orderID), uid)
   //模拟删除
   orderList.value = orderList.value.filter((item, index) => index != $index)
   // getList()

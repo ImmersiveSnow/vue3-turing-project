@@ -4,7 +4,7 @@ import {
   travelUploadCommentService
 } from '@/api/travel'
 import { useUserStore } from '@/stores'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const props = defineProps({
   detail: {
@@ -13,14 +13,17 @@ const props = defineProps({
   }
 })
 const userStore = useUserStore()
+const Id = computed(() => {
+  return parseInt(props.detail.exclusiveID)
+})
 const comment = ref({
   userId: userStore.userId,
   content: '',
-  Id: props.detail.exclusiveID
+  Id: Id
 })
 const commentList = ref([])
 const getCommentList = async () => {
-  const res = await travelGetCommentService(props.detail.exclusiveID)
+  const res = await travelGetCommentService(Id)
   commentList.value = res.data.data
 }
 const handlePublish = async () => {
