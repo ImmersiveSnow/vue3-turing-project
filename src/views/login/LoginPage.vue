@@ -162,12 +162,6 @@ watch(isRegister, () => {
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item class="flex">
-          <div class="flex">
-            <el-checkbox>记住我</el-checkbox>
-            <el-link type="primary" :underline="false">忘记密码？</el-link>
-          </div>
-        </el-form-item>
         <el-form-item>
           <el-button
             @click="toLogin"
