@@ -4,6 +4,6 @@ export const userRegisterService = ({ username, password }) =>
   request.post('/users/register', { username, password })
 
 export const userLoginService = ({ username, password }) =>
-  request.get('/users/login', { username, password })
+  request.get('/users/login', { params: { username, password } })
 
 export const userGetInfoService = () => request.get('/users/currentUser')

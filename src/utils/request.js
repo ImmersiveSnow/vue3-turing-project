@@ -1,6 +1,6 @@
 import { useUserStore } from '@/stores/modules/user'
 import axios from 'axios'
-const baseURL = 'https://apifoxmock.com/m1/5785555-5469949-default'
+const baseURL = 'http://localhost:3000'
 import router from '@/router'
 
 const instance = axios.create({
@@ -21,9 +21,11 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
-    if (res.status === 200) {
+    if (res.status === 200 || res.status === 201) {
       return res
     }
+    console.log(res.data.message)
+
     ElMessage({ message: res.data.message || '服务异常', type: 'error' })
     return Promise.reject(res.data)
   },
@@ -32,11 +34,10 @@ instance.interceptors.response.use(
       message: err.response.data.message || '服务异常',
       type: 'error'
     })
-    console.log(err)
     if (err.response?.status === 401) {
       router.push('/login')
     }
-    return Promise.reject(err)
+    return Promise.reject(err.response)
   }
 )
 

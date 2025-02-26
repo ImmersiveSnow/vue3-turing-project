@@ -6,29 +6,26 @@ export const useUserStore = defineStore(
   'the-user',
   () => {
     const token = ref('')
-    const setToken = (newtoken) => (token.value = newtoken)
-    const userId = ref()
-    const setId = (Id) => (userId.value = parseInt(Id))
+    const setToken = (newtoken) => (token.value = 'Bearer ' + newtoken)
 
     const removeToken = () => (token.value = '')
 
-    const user = ref({})
+    const userInfo = ref({})
     const getUser = async () => {
-      const res = await userGetInfoService()
-
-      user.value = res.data
+      if (!userInfo.value) {
+        const res = await userGetInfoService()
+        userInfo.value = res.data.data
+      }
     }
 
-    const setUser = (obj) => (user.value = obj)
+    const setUser = (obj) => (userInfo.value = obj)
     return {
       token,
       setToken,
       removeToken,
-      user,
+      userInfo,
       getUser,
-      setUser,
-      setId,
-      userId
+      setUser
     }
   },
   {

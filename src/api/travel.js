@@ -6,11 +6,16 @@ export const travelGetToursService = (params) =>
 export const travelGetSightsService = (params) =>
   request.get('/attractions/page', { params })
 
-export const travelUploadToursService = ({ name, description, img }) =>
-  request.post('/tours', { name, description, img })
+export const travelUploadSightsService = (formData) =>
+  request.post('/attractions', formData)
 
-export const travelUploadSightsService = ({ name, description, img }) =>
-  request.post('/attractions', { name, description, img })
+export const travelUploadToursService = (formData) => {
+  return request.post('/tours', formData, {
+    headers: {
+      'content-Type': 'multipart/form-data'
+    }
+  })
+}
 
 export const travelGetCommentService = ({ id }) =>
   request.get('/comments', { id })

@@ -9,7 +9,7 @@ import { ref, onMounted, computed } from 'vue'
 const props = defineProps({
   detail: {
     required: true,
-    tyep: Object
+    type: Object
   }
 })
 const userStore = useUserStore()

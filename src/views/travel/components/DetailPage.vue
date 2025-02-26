@@ -13,7 +13,7 @@ const detail = ref({})
 const defaultForm = {
   name: '',
   description: '',
-  img: ''
+  image: ''
 }
 const formModel = ref({
   ...defaultForm
@@ -22,15 +22,22 @@ const formRef = ref()
 const imgUrl = ref('')
 const onUploadFile = (uploadFile) => {
   imgUrl.value = URL.createObjectURL(uploadFile.raw)
-  formModel.value.img = uploadFile.raw
+  formModel.value.image = uploadFile.raw
+  console.log(formModel.value.image)
 }
 
 const route = useRoute()
 const onSubmit = async () => {
   await formRef.value.validate()
+  const formData = new FormData()
+
+  formData.append('name', formModel.value.name)
+  formData.append('description', formModel.value.description)
+  formData.append('image', formModel.value.image)
+
   route.name === 'sights'
-    ? await travelUploadSightsService(formModel.value)
-    : await travelUploadToursService(formModel.value)
+    ? await travelUploadSightsService(formData)
+    : await travelUploadToursService(formData)
 
   ElMessage.success('提交成功')
   dialogVisible.value = false
@@ -39,7 +46,7 @@ const onSubmit = async () => {
 const rules = {
   name: { required: true, message: '请输入名称', trigger: 'blur' },
   description: { required: true, message: '请填写活动形式', trigger: 'blur' },
-  img: { required: true, message: '请上传图片', trigger: 'blur' }
+  image: { required: true, message: '请上传图片', trigger: 'blur' }
 }
 const open = (row) => {
   if (row.exclusiveID) {
@@ -91,7 +98,7 @@ defineExpose({
           autocomplete="off"
         />
       </el-form-item>
-      <el-form-item prop="img" class="upload" label="图片">
+      <el-form-item prop="image" class="upload" label="图片">
         <el-upload
           class="avatar-uploader"
           :auto-upload="false"

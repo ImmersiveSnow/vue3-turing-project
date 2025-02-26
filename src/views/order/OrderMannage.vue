@@ -5,26 +5,25 @@ import { ref, onMounted, computed } from 'vue'
 import { Delete } from '@element-plus/icons-vue'
 const orderList = ref([])
 const userStore = useUserStore()
-const uid = ref()
 const params = ref({
-  pagenum: 1,
-  pagesize: 2,
-  uid: uid
+  page: 1,
+  size: 2,
+  uid: userStore.userInfo.uid
 })
 const total = computed(() => {
   return orderList.value.length
 })
 const getList = async () => {
-  const res = await orderGetListService(params)
+  const res = await orderGetListService(params.value)
   orderList.value = res.data.data
 }
 const onSizeChange = (size) => {
-  params.value.pagenum = 1
-  params.value.pagesize = size
+  params.value.page = 1
+  params.value.size = size
   getList()
 }
 const onCurrentChange = (page) => {
-  params.value.pagenum = page
+  params.value.page = page
   getList()
 }
 const delOrder = async (row, $index) => {
@@ -33,7 +32,7 @@ const delOrder = async (row, $index) => {
     confirmButtonText: '确认',
     cancelButtonText: '取消'
   })
-  await orderDelService(parseInt(row.orderID), uid)
+  await orderDelService(row.orderID, params.value.uid)
   //模拟删除
   orderList.value = orderList.value.filter((item, index) => index != $index)
   // getList()
@@ -41,7 +40,6 @@ const delOrder = async (row, $index) => {
 }
 onMounted(() => {
   getList()
-  uid.value = userStore.userId
 })
 </script>
 <template>
@@ -101,8 +99,8 @@ onMounted(() => {
       </el-table-column>
     </el-table>
     <el-pagination
-      v-model:current-page="params.pagenum"
-      v-model:page-size="params.pagesize"
+      v-model:current-page="params.page"
+      v-model:page-size="params.size"
       :page-sizes="[2, 3, 4, 5]"
       layout="total, sizes, prev, pager, next"
       background

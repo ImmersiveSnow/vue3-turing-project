@@ -24,7 +24,6 @@ const toExit = async () => {
   })
   userStore.removeToken()
   userStore.setUser({})
-  userStore.setId('')
 
   router.push(`/login`)
 }
@@ -44,7 +43,7 @@ const toExit = async () => {
         <div class="userAvatar">
           <el-avatar :size="55" :icon="UserFilled" />
           <el-text tag="Ins" size="large" type="info">
-            User#{{ userStore.userId || 1337 }}</el-text
+            User#{{ userStore.userInfo.uid || 1337 }}</el-text
           >
           <el-button @click="toExit" type="info" round>退出</el-button>
         </div>

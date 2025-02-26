@@ -9,8 +9,8 @@ import { useUserStore } from '@/stores'
 const isLoading = ref(true)
 const travelList = ref([])
 const params = ref({
-  pagenum: 1,
-  pagesize: 2
+  page: 1,
+  size: 2
 })
 const total = ref(0)
 
@@ -18,19 +18,20 @@ const getList = async () => {
   isLoading.value = true
   const res =
     type.value === 'sights'
-      ? await travelGetSightsService(params)
-      : await travelGetToursService(params)
-
+      ? await travelGetSightsService(params.value)
+      : await travelGetToursService(params.value)
   travelList.value = res.data.data
-  total.value = res.data.data.length
+  console.log(res.data)
+  total.value = res.data.total
+  isLoading.value = false
 }
 const onSizeChange = (size) => {
-  params.value.pagenum = 1
-  params.value.pagesize = size
+  params.value.page = 1
+  params.value.size = size
   getList()
 }
 const onCurrentChange = (page) => {
-  params.value.pagenum = page
+  params.value.page = page
   getList()
 }
 
@@ -44,7 +45,7 @@ const handleAdd = () => {
 const userStore = useUserStore()
 const router = useRouter()
 const addOrder = async (row, $index) => {
-  await orderPutService(userStore.userId, $index, row.name)
+  await orderPutService(userStore.userId, $index, row.name, 5)
   ElMessage.success('订单添加成功')
   router.push('/order')
 }
@@ -112,8 +113,8 @@ watch(
       </el-table-column>
     </el-table>
     <el-pagination
-      v-model:current-page="params.pagenum"
-      v-model:page-size="params.pagesize"
+      v-model:current-page="params.page"
+      v-model:page-size="params.size"
       :page-sizes="[2, 3, 4, 5]"
       layout="total, sizes, prev, pager, next"
       background

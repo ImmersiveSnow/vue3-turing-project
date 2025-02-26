@@ -60,7 +60,8 @@ const router = useRouter()
 
 const toRegister = async () => {
   await form.value.validate()
-  await userRegisterService(formModel.value)
+  const res = await userRegisterService(formModel.value)
+  console.log(res)
 
   ElMessage.success('注册成功')
   isRegister.value = false
@@ -68,9 +69,9 @@ const toRegister = async () => {
 const toLogin = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
+  console.log(res)
 
-  userStore.setToken(JSON.stringify(res.data))
-  userStore.setId(res.data.uid)
+  userStore.setToken(res.data.data.token)
   ElMessage.success('登陆成功')
   router.push('/')
 }
