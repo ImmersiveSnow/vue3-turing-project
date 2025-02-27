@@ -18,6 +18,7 @@ const defaultForm = {
 const formModel = ref({
   ...defaultForm
 })
+const emit = defineEmits(['success'])
 const formRef = ref()
 const imgUrl = ref('')
 const onUploadFile = (uploadFile) => {
@@ -41,6 +42,7 @@ const onSubmit = async () => {
 
   ElMessage.success('提交成功')
   dialogVisible.value = false
+  emit('success')
 }
 
 const rules = {
@@ -69,6 +71,7 @@ defineExpose({
     v-model="dialogVisible"
     width="800"
     align-center
+    destroy-on-close="true"
   >
     <template #header>
       <span v-if="!isAdd"

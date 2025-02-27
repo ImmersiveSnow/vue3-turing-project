@@ -21,7 +21,6 @@ const getList = async () => {
       ? await travelGetSightsService(params.value)
       : await travelGetToursService(params.value)
   travelList.value = res.data.data
-  console.log(res.data)
   total.value = res.data.total
   isLoading.value = false
 }
@@ -44,10 +43,18 @@ const handleAdd = () => {
 }
 const userStore = useUserStore()
 const router = useRouter()
-const addOrder = async (row, $index) => {
-  await orderPutService(userStore.userId, $index, row.name, 5)
+const addOrder = async (row) => {
+  await orderPutService(
+    userStore.userInfo.uid,
+    row.exclusiveID,
+    row.name,
+    Math.floor(Math.random() * 10) + 1
+  )
   ElMessage.success('订单添加成功')
   router.push('/order')
+}
+const onSuccess = () => {
+  getList()
 }
 
 const route = useRoute()
@@ -123,7 +130,7 @@ watch(
       @current-change="onCurrentChange"
       style="margin-top: 20px; justify-content: flex-end"
     />
-    <detail-page ref="detail">
+    <detail-page ref="detail" @success="onSuccess">
       <template #header>{{
         type === 'sights' ? '添加景点' : '添加旅游团'
       }}</template>

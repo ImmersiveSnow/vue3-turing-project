@@ -4,7 +4,7 @@ import {
   travelUploadCommentService
 } from '@/api/travel'
 import { useUserStore } from '@/stores'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const props = defineProps({
   detail: {
@@ -13,28 +13,21 @@ const props = defineProps({
   }
 })
 const userStore = useUserStore()
-const Id = computed(() => {
-  return parseInt(props.detail.exclusiveID)
-})
 const comment = ref({
-  userId: userStore.userId,
+  uid: userStore.userInfo.uid,
   content: '',
-  Id: Id
+  exclusiveID: props.detail.exclusiveID
 })
 const commentList = ref([])
 const getCommentList = async () => {
-  const res = await travelGetCommentService(Id)
+  const res = await travelGetCommentService(props.detail.exclusiveID)
+  console.log(res.data.data)
   commentList.value = res.data.data
 }
 const handlePublish = async () => {
   await travelUploadCommentService(comment.value)
   ElMessage.success('发表成功')
-  //模拟发表
-  commentList.value.unshift({
-    uid: comment.value.userId,
-    content: comment.value.content
-  })
-  // getCommentList()
+  getCommentList()
   comment.value.content = ''
 }
 onMounted(() => {
@@ -92,7 +85,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   padding: 0 250px;
-  overflow: hidden;
   .publish_section {
     margin-top: 60px;
     .input_container {

@@ -26,16 +26,14 @@ const onCurrentChange = (page) => {
   params.value.page = page
   getList()
 }
-const delOrder = async (row, $index) => {
+const delOrder = async (row) => {
   await ElMessageBox.confirm('你确认删除吗？', '温馨提示', {
     type: 'warning',
     confirmButtonText: '确认',
     cancelButtonText: '取消'
   })
   await orderDelService(row.orderID, params.value.uid)
-  //模拟删除
-  orderList.value = orderList.value.filter((item, index) => index != $index)
-  // getList()
+  getList()
   ElMessage.success('删除成功')
 }
 onMounted(() => {

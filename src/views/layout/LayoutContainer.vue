@@ -1,21 +1,9 @@
 <script setup>
 import { UserFilled } from '@element-plus/icons-vue'
-import { onMounted } from 'vue'
 import { useUserStore } from '@/stores'
 import router from '@/router'
 
-// const handleOpen = (key, keyPath) => {
-//   console.log(key, keyPath)
-// }
-// const handleClose = (key, keyPath) => {
-//   console.log(key, keyPath)
-// }
-
 const userStore = useUserStore()
-onMounted(() => {
-  userStore.getUser()
-})
-
 const toExit = async () => {
   await ElMessageBox.confirm('你确认退出吗？', '温馨提示', {
     type: 'warning',
@@ -42,8 +30,10 @@ const toExit = async () => {
       >
         <div class="userAvatar">
           <el-avatar :size="55" :icon="UserFilled" />
-          <el-text tag="Ins" size="large" type="info">
-            User#{{ userStore.userInfo.uid || 1337 }}</el-text
+          <el-text size="large" type="info">
+            {{ userStore.userInfo.username || User }}#{{
+              userStore.userInfo.uid || 1337
+            }}</el-text
           >
           <el-button @click="toExit" type="info" round>退出</el-button>
         </div>
@@ -62,11 +52,9 @@ const toExit = async () => {
 <style lang="less">
 .layout-container {
   height: 100vh;
-  overflow: hidden;
+  // overflow: hidden;
 
   .menu-body {
-    height: 100vh;
-
     .el-menu {
       height: 100%;
       min-width: 80px;

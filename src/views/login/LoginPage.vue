@@ -1,5 +1,9 @@
 <script setup>
-import { userLoginService, userRegisterService } from '@/api/user'
+import {
+  userLoginService,
+  userRegisterService,
+  userGetInfoService
+} from '@/api/user'
 import { useUserStore } from '@/stores'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue'
@@ -69,9 +73,9 @@ const toRegister = async () => {
 const toLogin = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
-  console.log(res)
-
   userStore.setToken(res.data.data.token)
+  const info = await userGetInfoService()
+  userStore.setUser(info.data.data)
   ElMessage.success('登陆成功')
   router.push('/')
 }
